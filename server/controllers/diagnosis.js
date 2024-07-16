@@ -1,10 +1,9 @@
 const User = require('../models/User');
 const Diagnosis = require('../models/Diagnosis');
 
-// Fungsi sederhana untuk mendiagnosis gangguan tidur
+// Simple function to diagnose sleep disorder
 const diagnoseSleepDisorder = (data) => {
   const { sleepDuration, qualityOfSleep, physicalActivityLevel, stressLevel, bloodPressure, heartRate, dailySteps } = data;
-  // Logika diagnosis sederhana
   if (sleepDuration < 4 || sleepDuration > 10 || qualityOfSleep === 'poor' || stressLevel === 'high') {
     return { disorder: 'Possible sleep disorder detected', solution: 'Consult a sleep specialist, maintain a regular sleep schedule, reduce stress.' };
   } else {
@@ -12,7 +11,7 @@ const diagnoseSleepDisorder = (data) => {
   }
 };
 
-exports.diagnose = async (req, res) => {
+exports.addDiagnose = async (req, res) => {
   try {
     const { uid, date, gender, age, name, BMIcategory, sleepDuration, qualityOfSleep, physicalActivityLevel, stressLevel, bloodPressure, heartRate, dailySteps } = req.body;
 
@@ -49,6 +48,37 @@ exports.diagnose = async (req, res) => {
     await user.save();
 
     res.status(201).send({ message: 'Diagnosis complete', diagnosis: newDiagnosis });
+  } catch (err) {
+    res.status(500).send({ message: 'Internal server error', error: err.message });
+  }
+};
+
+exports.getAllDiagnosesByUser = async (req, res) => {
+  try {
+    const uid = req.user._id;  // Assuming user ID is set in req.user by the auth middleware
+    const diagnoses = await Diagnosis.find({ uid });
+    res.status(200).send(diagnoses);
+  } catch (err) {
+    res.status(500).send({ message: 'Internal server error', error: err.message });
+  }
+};
+
+exports.editDiagnosis = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedData = req.body;
+    const updatedDiagnosis = await Diagnosis.findByIdAndUpdate(id, updatedData, { new: true });
+    res.status(200).send({ message: 'Diagnosis updated', diagnosis: updatedDiagnosis });
+  } catch (err) {
+    res.status(500).send({ message: 'Internal server error', error: err.message });
+  }
+};
+
+exports.deleteDiagnosis = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Diagnosis.findByIdAndDelete(id);
+    res.status(200).send({ message: 'Diagnosis deleted' });
   } catch (err) {
     res.status(500).send({ message: 'Internal server error', error: err.message });
   }
