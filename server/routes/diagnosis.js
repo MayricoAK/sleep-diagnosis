@@ -10,9 +10,9 @@ router.post('/', authMiddleware, diagnosisController.addDiagnose);
 router.get('/', authMiddleware, diagnosisController.getAllDiagnosesByUser);
 
 // Route to edit a diagnosis
-router.put('/edit/:id', authMiddleware, diagnosisController.editDiagnosis);
+router.put('/:id', authMiddleware, diagnosisController.editDiagnosis);
 
 // Route to delete a diagnosis
-router.delete('/delete/:id', authMiddleware, diagnosisController.deleteDiagnosis);
+router.delete('/:id', authMiddleware, diagnosisController.deleteDiagnosis);
 
 module.exports = router;
