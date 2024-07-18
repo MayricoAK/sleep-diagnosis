@@ -1,4 +1,3 @@
-const User = require('../models/User');
 const Diagnosis = require('../models/Diagnosis');
 const { 
   diagnoseSleepDisorder, 
@@ -11,10 +10,11 @@ const {
 exports.addDiagnose = async (req, res) => {
   try {
     const user = req.user;
-    const { sleepDuration, qualityOfSleep, physicalActivityInMinute, stressLevel, bloodPressure, heartRate, dailySteps, diagnosisDate, height, weight } = req.body;
+    const { sleepDuration, qualityOfSleep, physicalActivity, stressLevel, bloodPressure, heartRate, dailySteps, diagnosisDate, height, weight } = req.body;
 
     // Use the formatDiagnosisDate function
     const formattedDiagnosisDate = formatDiagnosisDate(diagnosisDate);
+    const physicalActivityInMinute = physicalActivity/60;
 
     const BMI = calculateBMI(weight, height);
     const diagnosisData = {
@@ -53,33 +53,11 @@ exports.addDiagnose = async (req, res) => {
   }
 };
 
-
 exports.getAllDiagnosesByUser = async (req, res) => {
   try {
     const uid = req.user._id;  // User ID from authenticated user
     const diagnoses = await Diagnosis.find({ uid });
     res.status(200).send(diagnoses);
-  } catch (err) {
-    res.status(500).send({ message: 'Internal server error', error: err.message });
-  }
-};
-
-exports.editDiagnosis = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const updatedData = req.body;
-
-    if (updatedData.weight && updatedData.height) {
-      updatedData.BMIcategory = calculateBMI(updatedData.weight, updatedData.height);
-    }
-
-    const { disorder, solution } = diagnoseSleepDisorder(updatedData);
-    updatedData.sleepDisorder = disorder;
-    updatedData.solution = solution;
-    updatedData.timestamp=getTimestamp();
-
-    const updatedDiagnosis = await Diagnosis.findByIdAndUpdate(id, updatedData, { new: true });
-    res.status(200).send({ message: 'Diagnosis updated', diagnosis: updatedDiagnosis });
   } catch (err) {
     res.status(500).send({ message: 'Internal server error', error: err.message });
   }

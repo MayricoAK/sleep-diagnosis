@@ -9,9 +9,6 @@ router.post('/', authMiddleware, diagnosisController.addDiagnose);
 // Route to get all diagnoses by user
 router.get('/', authMiddleware, diagnosisController.getAllDiagnosesByUser);
 
-// Route to edit a diagnosis
-router.put('/:id', authMiddleware, diagnosisController.editDiagnosis);
-
 // Route to delete a diagnosis
 router.delete('/:id', authMiddleware, diagnosisController.deleteDiagnosis);
 

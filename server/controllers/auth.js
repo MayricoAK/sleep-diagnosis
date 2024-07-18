@@ -4,20 +4,33 @@ const User = require('../models/User');
 
 exports.register = async (req, res) => {
   try {
-    const { name, age, gender, birthdate, email, password } = req.body;
+    const { name, email, password, gender, age, birthDate } = req.body;
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).send({ message: 'Email already in use' });
+    }
+
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Create a new user
     const newUser = new User({
       name,
-      age,
-      gender,
-      birthdate,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      gender,
+      age,
+      birthDate: new Date(birthDate)
     });
 
     await newUser.save();
-    res.status(201).send({ message: 'User registered successfully' });
+
+    // Create a token
+    const token = jwt.sign({ userId: newUser._id }, 'your_jwt_secret', { expiresIn: '1h' });
+
+    res.status(201).send({ message: 'User registered successfully', token });
   } catch (err) {
     res.status(500).send({ message: 'Internal server error', error: err.message });
   }

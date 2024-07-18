@@ -26,21 +26,17 @@ function calculateBMI(weight, height){
 
 // Function to get current date
 function getCurrentDate(){
-    return moment().format("DD-MM-YYYY");
+    return moment().toDate();
 }
 
 // Function to get timestamp
 function getTimestamp(){
-    return moment().format("DD-MM-YYYY/hh:mm:ss");
+    return moment().toDate();
 }
 
-// Function to format diagnosis date
+// Function to format diagnosis date from dd-mm-yyyy to Date object
 function formatDiagnosisDate(date) {
-    const formattedDate = moment(date, 'DD-MM-YYYY').toDate();
-    if (!formattedDate || !moment(formattedDate).isValid()) {
-        throw new Error('Invalid date format. Expected YYYY-MM-DD.');
-    }
-    return formattedDate;
+    return moment(date, "DD-MM-YYYY").toDate();
 }
 
 module.exports = {

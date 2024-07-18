@@ -18,8 +18,8 @@ const diagnosisSchema = new mongoose.Schema({
   dailySteps: { type: Number, required: true },
   sleepDisorder: { type: String },
   solution: { type: String },
-  createdAt: { type: String },
-  timestamp: { type: String }
+  createdAt: { type: Date },
+  timestamp: { type: Date }
 });
 
 module.exports = mongoose.model('Diagnosis', diagnosisSchema);
