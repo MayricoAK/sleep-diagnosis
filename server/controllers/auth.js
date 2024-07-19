@@ -1,10 +1,11 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { calculateAgeFromBirthDate } = require('../utils/Utils');
 
 exports.register = async (req, res) => {
   try {
-    const { name, email, password, gender, age, birthDate } = req.body;
+    const { name, email, password, gender, birthDate } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -14,6 +15,9 @@ exports.register = async (req, res) => {
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Calculate age from birthDate
+    const age = calculateAgeFromBirthDate(birthDate);
 
     // Create a new user
     const newUser = new User({

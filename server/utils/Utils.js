@@ -39,10 +39,16 @@ function formatDiagnosisDate(date) {
     return moment(date, "DD-MM-YYYY").toDate();
 }
 
+// Function to calculate age from birthDate
+function calculateAgeFromBirthDate(birthDate) {
+    return moment().diff(moment(birthDate, "YYYY-MM-DD"), 'years');
+}
+
 module.exports = {
     diagnoseSleepDisorder,
     calculateBMI,
     getCurrentDate,
     getTimestamp,
     formatDiagnosisDate,
+    calculateAgeFromBirthDate,
 };

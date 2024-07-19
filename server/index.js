@@ -19,6 +19,12 @@ mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopol
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Could not connect to MongoDB', err));
 
-app.listen(PORT, () => {
+app.get('/', (req, res) => {
+  res.send(`
+    <h1>ACCESS, FLASH!</h1>
+  `);
+});
+
+  app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
