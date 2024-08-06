@@ -2,7 +2,7 @@
 
 ### Prerequisites
 
-- Python 3.x
+- Python 3.8.7
 - pip (package installer for Python)
 
 ### 1. Create a virtual environment (optional)
