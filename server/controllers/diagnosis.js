@@ -1,22 +1,29 @@
 const Diagnosis = require('../models/Diagnosis');
-const { 
-  diagnoseSleepDisorder, 
+const Solution = require('../models/Solution'); // Import Solution model
+const axios = require('axios');
+const dotenv = require('dotenv');
+const {
   calculateBMI,
+  formatDiagnosisDate,
   getCurrentDate,
   getTimestamp,
-  formatDiagnosisDate
+  calculateSleepQuality,
+  calculateStressLevel,
+  convertBMI,
+  calculateBPCategory
 } = require('../utils/Utils');
+
+dotenv.config();
 
 exports.addDiagnose = async (req, res) => {
   try {
     const user = req.user;
     const { sleepDuration, qualityOfSleep, physicalActivity, stressLevel, bloodPressure, heartRate, dailySteps, diagnosisDate, height, weight } = req.body;
 
-    // Use the formatDiagnosisDate function
     const formattedDiagnosisDate = formatDiagnosisDate(diagnosisDate);
-    const physicalActivityInMinute = physicalActivity/60;
+    const physicalActivityInMinute = physicalActivity * 60; // Assuming input in hours
+    const BMI = calculateBMI(height, weight);
 
-    const BMI = calculateBMI(weight, height);
     const diagnosisData = {
       uid: user._id,
       diagnosisDate: formattedDiagnosisDate,
@@ -37,13 +44,35 @@ exports.addDiagnose = async (req, res) => {
       timestamp: getTimestamp()
     };
 
-    const { disorder, solution } = diagnoseSleepDisorder(diagnosisData);
-    diagnosisData.sleepDisorder = disorder;
-    diagnosisData.solution = solution;
+    const modelApiInput = {
+      Gender: diagnosisData.gender === 'Male' ? 1 : 0,
+      Age: diagnosisData.age,
+      Sleep_Duration: sleepDuration,
+      Sleep_Quality: calculateSleepQuality(qualityOfSleep),
+      Physical_Activity_Level: physicalActivityInMinute,
+      Stress_Level: calculateStressLevel(stressLevel),
+      BMI_Category: convertBMI(BMI),
+      Heart_Rate: heartRate,
+      Daily_Steps: dailySteps,
+      BP_Category: calculateBPCategory(bloodPressure)
+    };
 
-    const newDiagnosis = new Diagnosis(diagnosisData);
+    // Send data to Flask model API for prediction
+    const modelApiResponse = await axios.post(process.env.SLEEP_DISORDER_MODEL, modelApiInput);
+    const sleepDisorderPrediction = modelApiResponse.data.sleep_disorder;
+
+    // Fetch solution based on the sleep disorder prediction
+    const solutionData = await Solution.findOne({ diagnosis: sleepDisorderPrediction });
+    const solution = solutionData ? solutionData.solution : 'No solution available';
+
+    // Create a new diagnosis object
+    const newDiagnosis = new Diagnosis({
+      ...diagnosisData,
+      sleepDisorder: sleepDisorderPrediction,
+      solution: solution
+    });
+
     await newDiagnosis.save();
-
     user.diagnoses.push(newDiagnosis._id);
     await user.save();
 
@@ -55,7 +84,7 @@ exports.addDiagnose = async (req, res) => {
 
 exports.getAllDiagnosesByUser = async (req, res) => {
   try {
-    const uid = req.user._id;  // User ID from authenticated user
+    const uid = req.user._id;
     const diagnoses = await Diagnosis.find({ uid });
     res.status(200).send(diagnoses);
   } catch (err) {
@@ -72,6 +101,26 @@ exports.deleteDiagnosis = async (req, res) => {
     }
     await Diagnosis.findByIdAndDelete(id);
     res.status(200).send({ message: 'Diagnosis deleted' });
+  } catch (err) {
+    res.status(500).send({ message: 'Internal server error', error: err.message });
+  }
+};
+
+// Controller to get diagnosis details by ID
+exports.getDiagnosisById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the diagnosis by ID
+    const diagnosis = await Diagnosis.findById(id);
+
+    // Check if the diagnosis exists
+    if (!diagnosis) {
+      return res.status(404).send({ message: 'Diagnosis not found' });
+    }
+
+    // Send the diagnosis data
+    res.status(200).send(diagnosis);
   } catch (err) {
     res.status(500).send({ message: 'Internal server error', error: err.message });
   }

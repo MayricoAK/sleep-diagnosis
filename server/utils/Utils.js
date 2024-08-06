@@ -11,16 +11,16 @@ const diagnoseSleepDisorder = (data) => {
 };
 
 // Function to calculate BMI
-function calculateBMI(weight, height){
-    const heightInMeters = height / 100;
-    const BMI = weight / (heightInMeters ** 2);
-    let BMIcategory;
+function calculateBMI(height, weight){
+  const heightInMeters = height / 100;
+  const BMI = weight / (heightInMeters ** 2);
+  let BMIcategory;
     if (BMI < 25) {
-        return BMIcategory = 'Normal';
+      return BMIcategory = 'Normal';
     } else if (BMI < 30) {
-        return BMIcategory = 'Overweight';
+      return BMIcategory = 'Overweight';
     } else {
-        return BMIcategory = 'Obese';
+      return BMIcategory = 'Obese';
     }
 }
 
@@ -44,6 +44,53 @@ function calculateAgeFromBirthDate(birthDate) {
     return moment().diff(moment(birthDate, "YYYY-MM-DD"), 'years');
 }
 
+// Menghitung Sleep Quality
+function calculateSleepQuality(qualityOfSleep) {
+    if (qualityOfSleep >= 4 && qualityOfSleep <= 9) {
+      return qualityOfSleep - 4;
+    } else if (qualityOfSleep < 4) {
+      return 0;
+    } else {
+      return 5;
+    }
+  }
+
+// Menghitung Stress Level
+function calculateStressLevel(stressLevel) {
+  if (stressLevel >= 3 && stressLevel <= 8) {
+    return stressLevel - 3;
+  } else if (stressLevel < 3) {
+    return 0;
+  } else {
+    return 5;
+  }
+}
+
+function convertBMI(BMIcategory) {
+  let category = 0;
+  if (BMIcategory === 'Obese') {
+    category = 1;
+  } else if (BMIcategory === 'Overweight') {
+    category = 2;
+  }
+
+  return category;
+}
+
+// Menghitung BP Category
+function calculateBPCategory(bloodPressure) {
+  switch (bloodPressure) {
+    case 'Normal':
+      return 1;
+    case 'Stage 1':
+      return 2;
+    case 'Stage 2':
+      return 3;
+    default:
+      return 0;
+  }
+}
+
 module.exports = {
     diagnoseSleepDisorder,
     calculateBMI,
@@ -51,4 +98,8 @@ module.exports = {
     getTimestamp,
     formatDiagnosisDate,
     calculateAgeFromBirthDate,
+    calculateSleepQuality,
+    calculateStressLevel,
+    convertBMI,
+    calculateBPCategory,
 };

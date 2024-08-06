@@ -5,6 +5,10 @@ const diagnosisRoutes = require('./routes/diagnosis');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const dotenv = require('dotenv');
+const Solution = require('./models/Solution')
+const {
+  dataDiagnosisSolution
+} = require('./data/index');
 
 const app = express();
 dotenv.config();
@@ -25,6 +29,7 @@ app.get('/', (req, res) => {
   `);
 });
 
+  // Solution.insertMany(dataDiagnosisSolution);
   app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

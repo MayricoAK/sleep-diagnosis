@@ -9,7 +9,10 @@ router.post('/', authMiddleware, diagnosisController.addDiagnose);
 // Route to get all diagnoses by user
 router.get('/', authMiddleware, diagnosisController.getAllDiagnosesByUser);
 
-// Route to delete a diagnosis
+// Route to get detail of diagnosis by id diagnosis
+router.get('/:id', authMiddleware, diagnosisController.getDiagnosisById);
+
+// Route to delete a diagnosis by id diagnosis
 router.delete('/:id', authMiddleware, diagnosisController.deleteDiagnosis);
 
 module.exports = router;
