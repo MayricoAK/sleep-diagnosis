@@ -59,3 +59,13 @@ exports.login = async (req, res) => {
     res.status(500).send({ message: 'Internal server error', error: err.message });
   }
 };
+
+exports.logout = (req, res) => {
+  try {
+    const token = req.header('Authorization').replace('Bearer ', '');
+    blacklist.add(token); // Add token to blacklist
+    res.status(200).send({ message: 'Logout successful' });
+  } catch (err) {
+    res.status(500).send({ message: 'Internal server error', error: err.message });
+  }
+};
