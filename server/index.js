@@ -9,10 +9,17 @@ const Solution = require('./models/Solution')
 const {
   dataDiagnosisSolution
 } = require('./data/index');
+const cors = require('cors');
 
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT || 3000;
+
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  methods: ['GET', 'POST', 'DELETE', 'PUT'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(bodyParser.json());
 app.use('/diagnose', diagnosisRoutes);
