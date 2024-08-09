@@ -31,10 +31,7 @@ exports.register = async (req, res) => {
 
     await newUser.save();
 
-    // Create a token
-    const token = jwt.sign({ userId: newUser._id }, 'your_jwt_secret', { expiresIn: '1h' });
-
-    res.status(201).send({ message: 'User registered successfully', token });
+    res.status(201).send({ message: 'User registered successfully' });
   } catch (err) {
     res.status(500).send({ message: 'Internal server error', error: err.message });
   }
