@@ -22,7 +22,7 @@ app.use(cors({
 }));
 
 app.use(bodyParser.json());
-app.use('/diagnose', diagnosisRoutes);
+app.use('/diagnosis', diagnosisRoutes);
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 
