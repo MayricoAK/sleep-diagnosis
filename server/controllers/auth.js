@@ -31,7 +31,7 @@ exports.register = async (req, res) => {
 
     await newUser.save();
 
-    res.status(201).send({ message: 'User registered successfully' });
+    res.status(201).send({ message: 'User registered successfully', newUser });
   } catch (err) {
     res.status(500).send({ message: 'Internal server error', error: err.message });
   }

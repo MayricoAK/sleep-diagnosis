@@ -15,18 +15,19 @@ const {
 
 dotenv.config();
 
+const dayjs = require('dayjs');
+
 exports.addDiagnose = async (req, res) => {
   try {
     const user = req.user;
     const { sleepDuration, qualityOfSleep, physicalActivity, stressLevel, bloodPressure, heartRate, dailySteps, diagnosisDate, height, weight } = req.body;
 
-    const formattedDiagnosisDate = formatDiagnosisDate(diagnosisDate);
     const physicalActivityInMinute = physicalActivity * 60; // Assuming input in hours
     const BMI = calculateBMI(height, weight);
 
     const diagnosisData = {
       uid: user._id,
-      diagnosisDate: formattedDiagnosisDate,
+      diagnosisDate: dayjs(diagnosisDate, 'DD-MM-YYYY').toDate(),
       gender: user.gender,
       age: user.age,
       name: user.name,
@@ -40,8 +41,7 @@ exports.addDiagnose = async (req, res) => {
       bloodPressure,
       heartRate,
       dailySteps,
-      createdAt: getCurrentDate(),
-      timestamp: getTimestamp()
+      createdAt: dayjs().format('DD-MM-YYYY'),
     };
 
     const modelApiInput = {
@@ -85,12 +85,25 @@ exports.addDiagnose = async (req, res) => {
 exports.getAllDiagnosesByUser = async (req, res) => {
   try {
     const uid = req.user._id;
-    const diagnoses = await Diagnosis.find({ uid });
-    res.status(200).send(diagnoses);
+
+    // Retrieve and sort diagnoses by diagnosisDate in descending order
+    const diagnoses = await Diagnosis.find({ uid })
+      .sort({ diagnosisDate: -1 });
+
+    // Format dates
+    const formattedDiagnoses = diagnoses.map(diagnosis => ({
+      ...diagnosis._doc,
+      diagnosisDate: dayjs(diagnosis.diagnosisDate).format('DD-MM-YYYY'),
+      createdAt: dayjs(diagnosis.createdAt).format('DD-MM-YYYY'),
+      timestamp: dayjs(diagnosis.timestamp).format('DD-MM-YYYY')
+    }));
+
+    res.status(200).send(formattedDiagnoses);
   } catch (err) {
     res.status(500).send({ message: 'Internal server error', error: err.message });
   }
 };
+
 
 exports.deleteDiagnosis = async (req, res) => {
   try {
