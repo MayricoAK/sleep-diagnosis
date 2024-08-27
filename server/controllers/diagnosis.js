@@ -3,19 +3,15 @@ const Solution = require('../models/Solution'); // Import Solution model
 const axios = require('axios');
 const dotenv = require('dotenv');
 const {
-  calculateBMI,
   formatDiagnosisDate,
-  getCurrentDate,
-  getTimestamp,
+  calculateBMI,
   calculateSleepQuality,
   calculateStressLevel,
   convertBMI,
   calculateBPCategory
 } = require('../utils/Utils');
-
-dotenv.config();
-
 const dayjs = require('dayjs');
+dotenv.config();
 
 exports.addDiagnose = async (req, res) => {
   try {
@@ -27,7 +23,7 @@ exports.addDiagnose = async (req, res) => {
 
     const diagnosisData = {
       uid: user._id,
-      diagnosisDate: dayjs(diagnosisDate, 'DD-MM-YYYY').toDate(),
+      diagnosisDate: formatDiagnosisDate(diagnosisDate),
       gender: user.gender,
       age: user.age,
       name: user.name,
@@ -40,8 +36,7 @@ exports.addDiagnose = async (req, res) => {
       stressLevel,
       bloodPressure,
       heartRate,
-      dailySteps,
-      createdAt: dayjs().format('DD-MM-YYYY'),
+      dailySteps
     };
 
     const modelApiInput = {
