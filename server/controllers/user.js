@@ -10,7 +10,6 @@ exports.getUserDetails = async (req, res) => {
       return res.status(404).send({ message: 'User not found' });
     }
 
-    // Kalkulasi umur
     user.age = calculateAgeFromBirthDate(user.birthDate);
 
     res.status(200).send(user);
