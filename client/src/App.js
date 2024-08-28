@@ -10,7 +10,7 @@ import Home from "scenes/Home";
 import Login from "scenes/Login";
 import Register from "scenes/Register";
 import Profile from "scenes/Profile";
-import Diagnosis from "scenes/diagnosis";
+// import Diagnosis from "scenes/diagnosis";
 import DetailDiagnosis from "scenes/DetailDiagnosis";
 
 // Helper component to redirect authenticated users away from login/register pages
@@ -44,7 +44,6 @@ function App() {
               <Route path="/diagnosis/:id" element={<PrivateRoute element={<DetailDiagnosis />} />} />
               <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
               <Route path="/profile/update" element={<PrivateRoute element={<Home />} />} />
-              {/* Add more protected routes here */}
             </Route>
           </Routes>
         </ThemeProvider>

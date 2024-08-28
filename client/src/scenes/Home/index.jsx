@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import { DeleteRounded, InfoRounded, AddRounded, CloseRounded } from '@mui/icons-material';
 import FormDiagnosis from 'components/FormDiagnosis';
 import ListDiagnosis from 'components/ListDiagnosis';
-import dayjs from 'dayjs';
 
 const Home = () => {
   const { data, isLoading, refetch } = useGetDiagnosisQuery();
@@ -19,16 +18,10 @@ const Home = () => {
 
   useEffect(() => {
     if (Array.isArray(data)) {
-      const processedRows = data.map((diagnosis) => {
-        const formattedDate = diagnosis.diagnosisDate
-          ? dayjs(diagnosis.diagnosisDate, 'YYYY-MM-DD').format('DD-MM-YYYY')
-          : 'No date available';
-        return {
-          id: diagnosis._id,
-          ...diagnosis,
-          diagnosisDate: formattedDate,
-        };
-      });
+      const processedRows = data.map((diagnosis) => ({
+        id: diagnosis._id,
+        ...diagnosis, // Dates are already formatted by the backend
+      }));
       setRows(processedRows);
     }
   }, [data]);

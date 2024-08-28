@@ -2,6 +2,7 @@ const Diagnosis = require('../models/Diagnosis');
 const Solution = require('../models/Solution'); // Import Solution model
 const axios = require('axios');
 const dotenv = require('dotenv');
+const moment = require('moment');
 const {
   formatDiagnosisDate,
   calculateBMI,
@@ -82,15 +83,14 @@ exports.getAllDiagnosesByUser = async (req, res) => {
     const uid = req.user._id;
 
     // Retrieve and sort diagnoses by diagnosisDate in descending order
-    const diagnoses = await Diagnosis.find({ uid })
-      .sort({ diagnosisDate: -1 });
+    const diagnoses = await Diagnosis.find({ uid }).sort({ diagnosisDate: -1 });
 
-    // Format dates
+    // Format dates using moment
     const formattedDiagnoses = diagnoses.map(diagnosis => ({
       ...diagnosis._doc,
-      diagnosisDate: dayjs(diagnosis.diagnosisDate).format('DD-MM-YYYY'),
-      createdAt: dayjs(diagnosis.createdAt).format('DD-MM-YYYY'),
-      timestamp: dayjs(diagnosis.timestamp).format('DD-MM-YYYY')
+      diagnosisDate: moment(diagnosis.diagnosisDate).format('DD-MM-YYYY'),
+      createdAt: moment(diagnosis.createdAt).format('DD-MM-YYYY'),
+      timestamp: moment(diagnosis.timestamp).format('DD-MM-YYYY'),
     }));
 
     res.status(200).send(formattedDiagnoses);

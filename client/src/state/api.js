@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { isTokenExpired } from "utils/utils";
 
 export const api = createApi({
     baseQuery: fetchBaseQuery({
@@ -6,7 +7,12 @@ export const api = createApi({
         prepareHeaders: (headers) => {
             const token = localStorage.getItem('token');
             if (token) {
-                headers.set('Authorization', `Bearer ${token}`);
+                if (isTokenExpired(token)) {
+                    localStorage.removeItem('token');
+                    window.location.href = '/';
+                } else {
+                    headers.set('Authorization', `Bearer ${token}`);
+                }
             }
             return headers;
         },
@@ -75,6 +81,12 @@ export const api = createApi({
             providesTags: ["UpdateUser"],
         }),
     }),
+    extractRehydrationInfo: (action, { reducerPath }) => {
+        if (action.error && action.error.status === 401) {
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        }
+    },
 });
 
 export const {
