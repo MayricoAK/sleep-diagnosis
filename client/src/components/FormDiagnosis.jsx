@@ -102,6 +102,7 @@ const FormDiagnosis = ({ onSuccess }) => {
                 type="number"
                 fullWidth
                 required
+                autoFocus
                 value={diagnosisData.sleepDuration}
                 onChange={handleChange}
               />
