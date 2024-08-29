@@ -23,6 +23,7 @@ const Home = () => {
         ...diagnosis, // Dates are already formatted by the backend
       }));
       setRows(processedRows);
+      // console.log(data);
     }
   }, [data]);
 

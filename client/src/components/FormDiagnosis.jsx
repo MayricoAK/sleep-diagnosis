@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Grid, Avatar, MenuItem } from '@mui/material';
 import { usePostDiagnosisMutation } from 'state/api';
-import { formatDate } from 'utils/utils';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Typography } from '@mui/material';
 import FlexBetween from 'components/FlexBetween';
@@ -63,7 +62,7 @@ const FormDiagnosis = ({ onSuccess }) => {
         weight: '',
       });
       onSuccess();
-      console.log('Diagnosis added:', formattedData);
+      // console.log('Diagnosis added:', formattedData);
     } catch (error) {
       console.error('Failed to add diagnosis:', error, formattedData);
     }
@@ -209,14 +208,6 @@ const FormDiagnosis = ({ onSuccess }) => {
               />
             </Grid>
             <Grid item xs={12}>
-              {/* <DatePicker
-                label="Diagnosis Date"
-                value={dayjs(diagnosisData.diagnosisDate, 'DD-MM-YYYY')}
-                onChange={handleDateChange}
-                slotProps={{
-                  textField: { fullWidth: true, required: true, id: 'diagnosisDate', name: 'diagnosisDate' }
-                }}
-              /> */}
               <DatePicker
                   label="Diagnosis Date"
                   value={diagnosisDate}
