@@ -91,11 +91,13 @@ exports.getAllDiagnosesByUser = async (req, res) => {
       diagnosisDate: moment(diagnosis.diagnosisDate).format('DD-MM-YYYY'),
       createdAt: moment(diagnosis.createdAt).format('DD-MM-YYYY'),
       timestamp: moment(diagnosis.timestamp).format('DD-MM-YYYY'),
+      physicalActivity: diagnosis.physicalActivityInMinute,
     }));
 
     res.status(200).send(formattedDiagnoses);
   } catch (err) {
     res.status(500).send({ message: 'Internal server error', error: err.message });
+    // console.log(err.message);
   }
 };
 
