@@ -1,14 +1,14 @@
 exports.dataDiagnosisSolution = [
-    {
-      diagnosis:'insomnia',
-      solution:'Insomnia bisa diatasi dengan rutinitas tidur yang teratur, lingkungan tidur yang nyaman, dan menghindari stimulan serta gangguan tidur seperti kafein dan gadget elektronik sebelum tidur. Teknik relaksasi, terapi perilaku kognitif, dan konseling juga bisa membantu. Jika perlu, dokter dapat meresepkan obat tidur, tapi konsultasi dengan profesional penting untuk mengevaluasi masalah tidur Anda secara spesifik.'
-    },
-    {
-      diagnosis:'sleep apnea',
-      solution:'Sleep apnea bisa diatasi dengan beberapa cara. Perubahan gaya hidup seperti menurunkan berat badan, menghindari alkohol/merokok, serta tidur dalam posisi yang tepat dapat membantu. Penggunaan alat bantu pernapasan seperti CPAP, APAP, atau BiPAP juga efektif. Terapi bedah untuk memperbaiki kelainan saluran napas dan terapi tidur/konseling juga bisa membantu mengurangi gejala. Konsultasikan dengan dokter untuk memilih pendekatan yang tepat sesuai kebutuhan Anda.'
-    },
-    {
-      diagnosis:'none',
-      solution:'Tidak ada permasalahan tidur yang terdeteksi, dan tetap jagalah kualitas tidur!'
-    }
+  {
+      diagnosis: 'insomnia',
+      solution: 'Insomnia can be managed with a regular sleep routine, a comfortable sleep environment, and avoiding stimulants and sleep disturbances such as caffeine and electronic gadgets before bedtime. Relaxation techniques, cognitive behavioral therapy, and counseling can also be helpful. If necessary, a doctor may prescribe sleep medication, but it’s important to consult with a professional to evaluate your specific sleep issues.'
+  },
+  {
+      diagnosis: 'sleep apnea',
+      solution: 'Sleep apnea can be managed in several ways. Lifestyle changes such as weight loss, avoiding alcohol/smoking, and sleeping in the correct position can help. The use of breathing devices like CPAP, APAP, or BiPAP is also effective. Surgical therapy to correct airway abnormalities and sleep therapy/counseling can also help reduce symptoms. Consult with a doctor to choose the right approach according to your needs.'
+  },
+  {
+      diagnosis: 'none',
+      solution: 'No sleep problems were detected; continue to maintain good sleep quality!'
+  }
 ];
